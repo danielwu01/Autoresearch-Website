@@ -1,0 +1,302 @@
+<!-- ERCOT Fuel-Price Passthrough — Research showcase site -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#16181d;
+    --ink-soft:#3c4250;
+    --muted:#6b7280;
+    --line:#e4e2db;
+    --paper:#fbfaf7;
+    --paper-2:#f4f2ec;
+    --accent:#1f3a5f;       /* deep academic navy */
+    --accent-soft:#3a5a86;
+    --llm:#b7791f;          /* amber  = LLM reasoning */
+    --code:#2b5d8c;         /* blue   = deterministic code */
+    --hpc:#3f7a52;          /* green  = HPC */
+    --maxw:980px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif;
+    font-size:17px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  .serif{font-family:'Newsreader',Georgia,serif;}
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+
+  /* ---------- Nav ---------- */
+  nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(251,250,247,.88);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{
+    max-width:var(--maxw);margin:0 auto;padding:0 28px;
+    height:58px;display:flex;align-items:center;justify-content:space-between;gap:18px;
+  }
+  .nav-brand{font-family:'Newsreader',serif;font-weight:600;font-size:18px;color:var(--ink);letter-spacing:.2px;white-space:nowrap}
+  .nav-links{display:flex;gap:22px;font-size:14px}
+  .nav-links a{color:var(--ink-soft)}
+  .nav-links a:hover{color:var(--accent);text-decoration:none}
+  @media(max-width:720px){.nav-links{display:none}}
+
+  /* ---------- Layout ---------- */
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+  section{padding:74px 0;border-top:1px solid var(--line)}
+  section:first-of-type{border-top:none}
+  .kicker{
+    font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--accent-soft);font-weight:600;margin-bottom:14px;
+  }
+  h1{font-family:'Newsreader',serif;font-weight:600;font-size:clamp(34px,6vw,52px);line-height:1.08;letter-spacing:-.5px;margin:0 0 18px}
+  h2{font-family:'Newsreader',serif;font-weight:600;font-size:clamp(26px,4vw,34px);line-height:1.15;letter-spacing:-.3px;margin:0 0 18px}
+  h3{font-family:'Newsreader',serif;font-weight:600;font-size:21px;margin:0 0 8px}
+  p{margin:0 0 16px;color:var(--ink-soft)}
+  .lead{font-size:20px;line-height:1.6;color:var(--ink);max-width:62ch}
+  .narrow{max-width:64ch}
+  code,.mono{font-family:'JetBrains Mono',monospace;font-size:.86em}
+  .em{color:var(--ink);font-weight:500}
+
+  /* ---------- Hero ---------- */
+  .hero{padding:86px 0 74px}
+  .badges{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:26px}
+  .badge{
+    font-size:12.5px;font-weight:500;color:var(--accent);
+    background:var(--paper-2);border:1px solid var(--line);
+    padding:5px 12px;border-radius:999px;
+  }
+  .hero-sub{font-size:20px;color:var(--ink-soft);max-width:60ch;margin-bottom:30px}
+  .cta{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:14.5px;font-weight:500;padding:11px 20px;border-radius:8px;
+    border:1px solid var(--accent);transition:.15s;
+  }
+  .btn-primary{background:var(--accent);color:#fff}
+  .btn-primary:hover{background:#16304f;text-decoration:none}
+  .btn-ghost{background:transparent;color:var(--accent)}
+  .btn-ghost:hover{background:var(--paper-2);text-decoration:none}
+  .byline{margin-top:34px;padding-top:22px;border-top:1px solid var(--line);font-size:15px;color:var(--muted)}
+  .byline .name{color:var(--ink);font-weight:600}
+
+  /* ---------- Two contributions ---------- */
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:8px}
+  @media(max-width:720px){.two{grid-template-columns:1fr}}
+  .card{
+    background:#fff;border:1px solid var(--line);border-radius:12px;padding:26px 26px 24px;
+  }
+  .card .num{font-family:'Newsreader',serif;font-size:15px;color:var(--accent-soft);font-weight:600;margin-bottom:10px}
+  .card h3{margin-bottom:10px}
+  .card p{margin-bottom:0;font-size:15.5px}
+
+  /* ---------- Table ---------- */
+  .tbl{width:100%;border-collapse:collapse;margin:8px 0 6px;font-size:15.5px}
+  .tbl th,.tbl td{text-align:left;padding:13px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+  .tbl th{font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .tbl td.val{font-family:'JetBrains Mono',monospace;font-weight:500;white-space:nowrap}
+  .pill{display:inline-block;padding:2px 9px;border-radius:6px;font-size:13px;font-weight:600}
+  .pill.low{background:#eaf2ec;color:#2f6042}
+  .pill.full{background:#e9eef5;color:#1f3a5f}
+  .pill.amp{background:#f6ecdf;color:#8a5a14}
+
+  /* ---------- Formula block ---------- */
+  .formula{
+    background:var(--paper-2);border:1px solid var(--line);border-left:3px solid var(--accent);
+    border-radius:8px;padding:18px 20px;margin:6px 0 18px;
+    font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--ink);overflow-x:auto;
+  }
+
+  /* ---------- Loop diagram ---------- */
+  .legend{display:flex;flex-wrap:wrap;gap:18px;margin:0 0 22px;font-size:13.5px;color:var(--ink-soft)}
+  .legend span{display:inline-flex;align-items:center;gap:7px}
+  .dot{width:11px;height:11px;border-radius:3px;display:inline-block}
+  .loop{
+    display:flex;flex-wrap:wrap;align-items:stretch;gap:0;
+    background:#fff;border:1px solid var(--line);border-radius:12px;padding:24px 20px;
+  }
+  .node{
+    flex:1 1 130px;min-width:120px;text-align:center;padding:14px 10px;border-radius:9px;
+    border:1px solid var(--line);background:var(--paper);
+  }
+  .node .role{font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;margin-bottom:6px}
+  .node .what{font-size:13.5px;color:var(--ink-soft);line-height:1.45}
+  .node.t-llm{border-top:3px solid var(--llm)} .node.t-llm .role{color:var(--llm)}
+  .node.t-code{border-top:3px solid var(--code)} .node.t-code .role{color:var(--code)}
+  .node.t-hpc{border-top:3px solid var(--hpc)} .node.t-hpc .role{color:var(--hpc)}
+  .arrow{display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:20px;padding:0 4px}
+  @media(max-width:720px){
+    .loop{flex-direction:column}
+    .arrow{transform:rotate(90deg);padding:6px 0}
+    .node{min-width:0}
+  }
+  .loopback{text-align:center;font-size:13px;color:var(--muted);margin-top:14px;font-style:italic}
+
+  /* ---------- Stats ---------- */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:6px}
+  @media(max-width:720px){.stats{grid-template-columns:repeat(2,1fr)}}
+  .stat{padding:18px 4px;border-top:2px solid var(--accent)}
+  .stat .big{font-family:'Newsreader',serif;font-size:30px;font-weight:600;color:var(--ink);line-height:1}
+  .stat .lbl{font-size:13px;color:var(--muted);margin-top:7px}
+
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:44px}
+  @media(max-width:720px){.cols{grid-template-columns:1fr;gap:8px}}
+
+  /* ---------- Footer ---------- */
+  footer{border-top:1px solid var(--line);background:var(--paper-2);padding:46px 0}
+  .foot-inner{max-width:var(--maxw);margin:0 auto;padding:0 28px;display:flex;flex-wrap:wrap;gap:22px;justify-content:space-between;align-items:flex-end}
+  .foot-links{display:flex;gap:20px;font-size:15px}
+  .fineprint{font-size:13px;color:var(--muted);margin-top:8px}
+</style>
+
+<nav>
+  <div class="nav-inner">
+    <span class="nav-brand">ERCOT Passthrough Research</span>
+    <div class="nav-links">
+      <a href="#overview">Overview</a>
+      <a href="#question">The Question</a>
+      <a href="#method">Method</a>
+      <a href="#model">Model</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap">
+    <div class="badges">
+      <span class="badge">Energy-market economics</span>
+      <span class="badge">Autonomous research loop</span>
+    </div>
+    <h1 class="serif">Fuel-Price Passthrough on the Texas Grid, Measured by an Autonomous Research Loop</h1>
+    <p class="hero-sub">An LLM-driven system runs an empirical study end-to-end — proposing hypotheses, dispatching supercomputer simulations, and writing up findings — to answer a real risk question: how unevenly does a natural-gas price shock reach electricity prices across ERCOT?</p>
+    <div class="byline">
+      <span class="name">Daniel Wu</span> · UNC Institute for Risk Management · 2026
+    </div>
+  </div>
+</header>
+
+<!-- OVERVIEW / TWO CONTRIBUTIONS -->
+<section id="overview">
+  <div class="wrap">
+    <div class="kicker">What this is</div>
+    <h2 class="serif">A method and a finding, deliberately fused</h2>
+    <p class="lead">This is first a methods project and second a scientific study. The method is an autonomous, inference-only agentic research loop. The study it runs is the demonstrating case: gas→power price passthrough across the Texas grid.</p>
+    <div class="two">
+      <div class="card">
+        <div class="num">Contribution 01</div>
+        <h3 class="serif">The loop itself</h3>
+        <p>A working autonomous research loop on real HPC infrastructure (UNC Longleaf, SLURM, Gurobi), with explicit scientific guardrails that keep its output causal-in-the-model rather than merely plausible-sounding.</p>
+      </div>
+      <div class="card">
+        <div class="num">Contribution 02</div>
+        <h3 class="serif">The empirical finding</h3>
+        <p>A validated, interpretable result produced <span class="em">by</span> that loop: gas→power passthrough is sizable but strongly location-dependent, and the heterogeneity tracks each bus's generation mix and congestion exposure.</p>
+      </div>
+    </div>
+    <p style="margin-top:24px" class="narrow"><span class="em">No model training is involved.</span> The loop is inference-only — it uses Claude models as reasoning components but trains nothing. Learning across iterations happens through an explicit, inspectable knowledge-base ledger, not weight updates. The two ends of the loop are LLMs (propose science, write prose); the middle is rigorous deterministic machinery. Humans stay in a supervisory role — the honest framing is <span class="em">supervised autonomy</span>.</p>
+  </div>
+</section>
+
+<!-- THE QUESTION -->
+<section id="question">
+  <div class="wrap">
+    <div class="kicker">The scientific question</div>
+    <h2 class="serif">When gas gets expensive, who actually pays?</h2>
+    <p class="narrow">When natural gas gets more expensive, electricity gets more expensive — but by how much, and is it the same everywhere? For each bus (network location) <code>n</code>, the passthrough coefficient measures how much of a gas-price shock reaches the Locational Marginal Price at that bus.</p>
+    <div class="formula">passthrough_n = mean_over_qualifying_hours( LMP_n_scenario − LMP_n_baseline ) / Δgas_price</div>
+    <p class="narrow" style="margin-bottom:24px">The shock is in $/MMBtu (gas); the response is in $/MWh (power); the coefficient is effectively a heat rate.</p>
+    <table class="tbl">
+      <thead><tr><th>Coefficient</th><th>Regime</th><th>What it means</th></tr></thead>
+      <tbody>
+        <tr><td class="val">≈ 1.0</td><td><span class="pill full">Full passthrough</span></td><td>Gas is the marginal fuel — $1/MMBtu of gas maps to roughly one heat-rate's worth of $/MWh.</td></tr>
+        <tr><td class="val">&lt; 0.5</td><td><span class="pill low">Insulated</span></td><td>Wind or hydro is often marginal, or congestion shields the bus from the shock.</td></tr>
+        <tr><td class="val">&gt; 1.0</td><td><span class="pill amp">Amplified</span></td><td>Congestion rent concentrates the shock at the bus.</td></tr>
+      </tbody>
+    </table>
+    <p class="narrow" style="margin-top:24px">The coefficient is a price sensitivity — a hedge ratio, a "delta." Because it differs by location, the dispersion across the grid is a form of <span class="em">basis risk</span>: the same gas shock hits different nodes by different amounts, so a hedge calibrated to a hub can leave a position at another node mis-hedged. The goal is not just to measure average passthrough, but to explain why it varies.</p>
+  </div>
+</section>
+
+<!-- METHOD / LOOP -->
+<section id="method">
+  <div class="wrap">
+    <div class="kicker">The method</div>
+    <h2 class="serif">Six roles passing artifacts in a cycle</h2>
+    <p class="narrow">Two ends are LLM reasoning; the middle is deterministic code and HPC. The loop is iterative, not one-shot: graded hypotheses accumulate in a per-year knowledge-base ledger that the next round of hypothesis generation reads back — so the agent stops re-testing settled questions.</p>
+    <div class="legend">
+      <span><i class="dot" style="background:var(--llm)"></i> LLM reasoning</span>
+      <span><i class="dot" style="background:var(--code)"></i> Deterministic code</span>
+      <span><i class="dot" style="background:var(--hpc)"></i> HPC (SLURM)</span>
+    </div>
+    <div class="loop">
+      <div class="node t-llm"><div class="role">LLM · Sonnet</div><div class="what">Hypothesis generator — proposes falsifiable experiments</div></div>
+      <div class="arrow">→</div>
+      <div class="node t-code"><div class="role">Code</div><div class="what">Config writer — perturbs only the gas price</div></div>
+      <div class="arrow">→</div>
+      <div class="node t-hpc"><div class="role">HPC</div><div class="what">Run scenario — full 365-day grid solve</div></div>
+      <div class="arrow">→</div>
+      <div class="node t-code"><div class="role">Code</div><div class="what">Analyzer + clustering — per-bus coefficients</div></div>
+      <div class="arrow">→</div>
+      <div class="node t-llm"><div class="role">LLM · Haiku</div><div class="what">Insight writer — interprets the verdict</div></div>
+    </div>
+    <p class="loopback">↺ Knowledge-base ledger grades each batch deterministically and feeds it back to the generator</p>
+
+    <div style="margin-top:36px" class="cols">
+      <div>
+        <h3 class="serif">The number decides, the LLM explains</h3>
+        <p style="font-size:15.5px">Every hypothesis carries a machine-readable predicate, evaluated against the scenario's passthrough data to produce a deterministic verdict — <span class="em">confirmed</span>, <span class="em">falsified</span>, or <span class="em">inconclusive</span>. The LLM then writes interpretation and caveats around that fixed verdict; it never grades itself.</p>
+      </div>
+      <div>
+        <h3 class="serif">One knob, held everything else fixed</h3>
+        <p style="font-size:15.5px">The only input the agent ever modifies is the daily fuel-price file. Load, wind, solar, outages, hydro, topology, and generator parameters are held byte-identical across baseline and scenario by symlinking — so any price change is attributable to the gas shock alone.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODEL -->
+<section id="model">
+  <div class="wrap">
+    <div class="kicker">The simulation backbone</div>
+    <h2 class="serif">GO_ERCOT — a day-ahead economic dispatch model</h2>
+    <p class="narrow">Each experiment is a full simulation of the ERCOT grid: a linear program built in Pyomo and solved with Gurobi, iterated day by day across a full year.</p>
+    <div class="stats">
+      <div class="stat"><div class="big">150</div><div class="lbl">network nodes, DC power flow</div></div>
+      <div class="stat"><div class="big">365</div><div class="lbl">days simulated per scenario</div></div>
+      <div class="stat"><div class="big">LP</div><div class="lbl">only — never MILP, for clean dual prices</div></div>
+      <div class="stat"><div class="big">2–18h</div><div class="lbl">compute per scenario</div></div>
+    </div>
+    <p class="narrow" style="margin-top:30px">LMPs are the dual variables of the nodal power-balance constraint. Economically, an LMP approximates <code>gas_price × heat_rate</code> when a gas unit is marginal, sits near zero when wind or hydro is marginal, and diverges across buses when a transmission constraint binds. That divergence is the source of the spatial heterogeneity the study measures. The LP is deliberate: unit-commitment binaries would contaminate the dual-price interpretation with startup-cost artifacts.</p>
+
+    <div style="margin-top:30px">
+      <div class="kicker">Validation against reality</div>
+      <h3 class="serif" style="margin-bottom:14px">Honest about what the model captures</h3>
+      <p class="narrow">The simulated baseline is checked against observed 2019 ERCOT settlement prices before any finding is trusted. Price levels match well — roughly $30.6/MWh modeled versus $35.8/MWh real, load-weighted — but hourly correlation is only moderate (r ≈ 0.43), driven by scarcity spikes the simple LP does not reproduce. The study measures normal-times sensitivity cleanly and flags the scarcity tail separately, rather than letting a handful of extreme hours dominate a coefficient.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-inner">
+    <div>
+      <div class="serif" style="font-size:19px;font-weight:600;color:var(--ink)">Daniel Wu</div>
+      <div class="fineprint">UNC Institute for Risk Management · Research in energy-market economics &amp; autonomous research systems</div>
+    </div>
+    <div>
+      <div class="foot-links">
+        <a href="mailto:danielwwu1@gmail.com">danielwwu1@gmail.com</a>
+      </div>
+      <div class="fineprint" style="text-align:right">© 2026 · ERCOT Passthrough Research</div>
+    </div>
+  </div>
+</footer>
