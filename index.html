@@ -11,9 +11,7 @@
 </head>
 <body style="margin:0;padding:0;background:#060F1E">
 <div id="root"></div>
-<script>
-
-const { useEffect, useMemo, useRef, useState } = React;
+<script>const { useEffect, useMemo, useRef, useState } = React;
 const { ResponsiveContainer, LineChart, Line, BarChart, Bar, ScatterChart, Scatter,
   XAxis, YAxis, CartesianGrid, Tooltip, Cell, ReferenceLine, Legend } = Recharts;
 function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
@@ -1151,42 +1149,42 @@ function ExampleWalkthrough() {
 var LOOP_STAGES = [{
   ix: "01",
   title: "Propose",
-  fn: "agent/hypothesis_generator.py",
+  fn: "Hypothesis Agent",
   desc: "Reads existing results, cluster summaries, and the knowledge-base ledger, then asks Claude (Opus 4.8) for falsifiable hypotheses. Each proposal carries a machine-readable predicate. Just a handful of calls per cycle, so token cost stays low.",
   file: "experiments/configs/2019/hypotheses/2019_wind_p20_summer.json",
   lines: ["{", '  "hypothesis": "High-wind buses capture above', '                 the system-mean price in summer.",', '  "mechanism":  "Daytime wind co-located with load",', '  "predicate": {', '    "subset":    "wind_fraction > 0.5",', '    "metric":    "capture_ratio_scen",', '    "agg":       "mean",', '    "op":        ">=",', '    "threshold": 0.88,', '    "min_buses": 5', "  }", "}"]
 }, {
   ix: "02",
   title: "Configure",
-  fn: "agent/config_writer.py",
+  fn: "Config Writer",
   desc: "Writes the study's perturbed target as ONE fresh real file; every other input is symlinked from read-only canon. Canon is never written through a symlink.",
   file: "experiments/configs/2019/2019_wind_p20_summer.json",
   lines: ["{", '  "year": "2019",', '  "scenario_id": "wind_p20_summer",', '  "study_type": "renewable_capture",', '  "perturbation": {', '    "kind": "renewable",', '    "target_file": "nodal_wind.csv",', '    "selector": "all_columns",', '    "type": "uniform_scale",', '    "magnitude": 0.20,', '    "day_range": [152, 243]', "  }", "}"]
 }, {
   ix: "03",
   title: "Dispatch",
-  fn: "slurm/run_scenario.sh",
+  fn: "SLURM Dispatcher",
   desc: "Each scenario is one SLURM job on Longleaf. The Pyomo LP solves 365 daily windows with Gurobi (gurobi_direct, so dual prices populate). Batches are capped at 20 jobs.",
   file: "$ sbatch slurm/run_scenario.sh 2019 wind_p20_summer",
   lines: ["# one fresh perturbed file; the rest symlinked canon", "# parity guard cmp's the model .py before solving", "Submitted batch job 48213307", "", "# outputs/Exp150_simple_2019_wind_p20_summer/", "#   duals.parquet   ← nodal shadow prices (LMPs)", "#   mwh.parquet     ← hourly generation by unit", "#   slack.parquet   ← unserved energy by bus/hour"]
 }, {
   ix: "04",
   title: "Analyze",
-  fn: "agent/result_analyzer.py",
+  fn: "Result Analyzer",
   desc: "Loads scenario + baseline parquets, builds the study's qualifying-hours mask (drop scarcity hours), runs the metric plugin, and appends the shared 5-feature matrix per bus.",
   file: "analysis/findings/2019/2019_wind_p20_summer_capture_price.csv",
   lines: ["# per-bus outcome + study-agnostic feature matrix", "bus,  capture_ratio_scen, wind_fraction, congestion_frequency", "bus_70123,  0.81,  0.63,  0.04", "bus_30451,  0.86,  0.55,  0.11", "bus_50887,  1.02,  0.08,  0.02", "…  (150 rows)", "", "# qualifying hours: slack == 0 in scenario AND baseline"]
 }, {
   ix: "05",
   title: "Grade",
-  fn: "agent/knowledge_base.py",
+  fn: "Grading Agent",
   desc: "Evaluates the predicate against the outcome CSV → a DETERMINISTIC verdict (the number decides, not the LLM). Appends the graded entry to the per-year ledger at the batch boundary.",
   file: "experiments/knowledge_base/2019.jsonl   (append-only)",
   lines: ["{", '  "scenario_id": "2019_wind_p20_summer",', '  "predicate": { "subset": "wind_fraction > 0.5",', '                 "agg": "mean", "op": ">=", "threshold": 0.88 },', '  "measured": { "mean_capture": 0.84, "n_buses": 22 },', '  "verdict": "falsified"', "}"]
 }, {
   ix: "06",
   title: "Record",
-  fn: "agent/insight_writer.py",
+  fn: "Insight Agent",
   desc: "Calls Claude (Opus 4.8) to interpret the fixed verdict — it explains and caveats, it never re-grades. One short call per scenario keeps token cost low. The finding cites the deterministic result.",
   file: "analysis/findings/2019/2019_wind_p20_summer.md",
   lines: ["# Finding — 2019_wind_p20_summer", "", "Verdict: FALSIFIED (data-computed).", "", "High-wind buses captured a mean 0.84 of the system", "price — below the 0.88 floor the hypothesis predicted.", "This is price cannibalization: when wind blows, local", "LMPs fall fastest exactly where wind concentrates."]
@@ -1319,7 +1317,7 @@ function StudyToggleDemo() {
     lines: ["# adding a question = one StudySpec + one metric fn", "STUDY_REGISTRY.register(StudySpec(", "    study_type=\"".concat(k, "\","), "    target=\"".concat(s.perturbs, "\","), "    metric=METRIC_PLUGINS[\"".concat(k.includes("gas") ? "passthrough" : "capture_price", "\"],"), "    hours=\"".concat(s.filter, "\","), "))", "# no other code changes — features + grader", "# are study-agnostic"]
   })), /*#__PURE__*/React.createElement("div", {
     className: "spec-card"
-  }, /*#__PURE__*/React.createElement("h4", null, "Study registry \u2014 agent/studies.py"), /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement("h4", null, "Study registry"), /*#__PURE__*/React.createElement("div", {
     className: "regrow"
   }, /*#__PURE__*/React.createElement("span", {
     className: "nm"
@@ -1391,7 +1389,7 @@ function LedgerPanel() {
     className: "ic"
   }, "2"), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h4", null, "Evaluate against the data", /*#__PURE__*/React.createElement("span", {
     className: "who"
-  }, "deterministic")), /*#__PURE__*/React.createElement("p", null, "knowledge_base.py runs the predicate over the outcome CSV. The number sets the verdict \u2014 confirmed, falsified, or inconclusive. No LLM in this step."))), /*#__PURE__*/React.createElement("div", {
+  }, "deterministic")), /*#__PURE__*/React.createElement("p", null, "The grading agent runs the predicate over the outcome CSV. The number sets the verdict \u2014 confirmed, falsified, or inconclusive. No LLM in this step."))), /*#__PURE__*/React.createElement("div", {
     className: "lf-conn"
   }), /*#__PURE__*/React.createElement("div", {
     className: "lf llm"
@@ -1399,7 +1397,7 @@ function LedgerPanel() {
     className: "ic"
   }, "3"), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h4", null, "Interpret the verdict", /*#__PURE__*/React.createElement("span", {
     className: "who"
-  }, "Opus 4.8")), /*#__PURE__*/React.createElement("p", null, "insight_writer.py explains and caveats the fixed verdict in prose. It never re-grades.")))), /*#__PURE__*/React.createElement("div", {
+  }, "Opus 4.8")), /*#__PURE__*/React.createElement("p", null, "The insight agent explains and caveats the fixed verdict in prose. It never re-grades.")))), /*#__PURE__*/React.createElement("div", {
     className: "honest"
   }, /*#__PURE__*/React.createElement("h5", null, "The honest caveat we publish too"), /*#__PURE__*/React.createElement("p", null, "Opus 4.8 still authors the predicate that grades its own next hypothesis. Computing the verdict from data breaks the worst of the echo loop \u2014 but the ", /*#__PURE__*/React.createElement("em", null, "choice of what to measure"), " is still LLM-driven, so the ledger is periodically audited for the generator narrowing onto self-confirming metrics. The loop makes only a few Opus 4.8 calls per cycle (low token cost), and an offline eval harness regression-tests both LLM modules at zero token cost."))), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
     className: "ledger-entry"
@@ -1761,7 +1759,6 @@ function ErcotPassthroughSite() {
   }, /*#__PURE__*/React.createElement("span", null, "ERCOT \xB7 LMP fuel-price passthrough"), /*#__PURE__*/React.createElement("span", null, "AutoResearch loop \xB7 inference-only"), /*#__PURE__*/React.createElement("span", null, "150 model buses \xB7 real ACTIVSg2000 locations")))));
 }
 ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(ErcotPassthroughSite));
-
 </script>
 </body>
 </html>
